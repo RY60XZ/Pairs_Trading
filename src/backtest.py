@@ -10,7 +10,7 @@ PROCESSED_DATA_PATH.mkdir(parents=True, exist_ok=True)
 
 INITIAL_CAPITAL = 100_000
 TRADING_DAYS = 252
-TRANSACTION_COST_RATE = 0.0005
+TRANSACTION_COST_RATE = 0.0003
 
 selected_pairs = pd.read_csv(PROCESSED_DATA_PATH / "selected_pairs.csv")
 selected_pairs["pair"] = selected_pairs["ticker1"] + "_" + selected_pairs["ticker2"]
