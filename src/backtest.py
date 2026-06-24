@@ -16,6 +16,7 @@ selected_pairs = pd.read_csv(PROCESSED_DATA_PATH / "selected_pairs.csv")
 selected_pairs["pair"] = selected_pairs["ticker1"] + "_" + selected_pairs["ticker2"]
 signals = pd.read_csv(PROCESSED_DATA_PATH / "signals.csv")
 train_returns = pd.read_csv(PROCESSED_DATA_PATH / "train_returns.csv")
+validation_returns = pd.read_csv(PROCESSED_DATA_PATH / "validation_returns.csv")
 test_returns = pd.read_csv(PROCESSED_DATA_PATH / "test_returns.csv")
 
 def compute_backtest(initial_capital=INITIAL_CAPITAL, transaction_cost=TRANSACTION_COST_RATE, period="train"):
@@ -23,10 +24,12 @@ def compute_backtest(initial_capital=INITIAL_CAPITAL, transaction_cost=TRANSACTI
     pair_results = []
     if period == "train":
         period_returns = train_returns
+    elif period == "validation":
+        period_returns = validation_returns
     elif period == "test":
         period_returns = test_returns
     else:
-        raise ValueError("period must be 'train' or 'test'")
+        raise ValueError("period must be 'train', 'validation', or 'test'")
     period_signals = signals[signals["period"] == period]
     period_returns = period_returns.set_index("date")
 
@@ -82,4 +85,5 @@ def compute_backtest(initial_capital=INITIAL_CAPITAL, transaction_cost=TRANSACTI
 
 if __name__ == "__main__":
     compute_backtest(period="train")
+    compute_backtest(period="validation")
     compute_backtest(period="test")

@@ -39,6 +39,7 @@ def run_one_config(lookback_window, entry_z, exit_z, stop_loss_z, transaction_co
 
     importlib.reload(backtest)
     backtest.compute_backtest(period="train", transaction_cost=transaction_cost)
+    backtest.compute_backtest(period="validation", transaction_cost=transaction_cost)
     backtest.compute_backtest(period="test", transaction_cost=transaction_cost)
 
     result = {
@@ -49,6 +50,7 @@ def run_one_config(lookback_window, entry_z, exit_z, stop_loss_z, transaction_co
         "transaction_cost": transaction_cost,
     }
     result.update(read_metrics("train"))
+    result.update(read_metrics("validation"))
     result.update(read_metrics("test"))
     return result
 
@@ -69,7 +71,7 @@ def compute_validation():
                         results.append(result)
 
     results = pd.DataFrame(results)
-    results = results.sort_values(["train_sharpe_ratio", "test_sharpe_ratio"], ascending=False)
+    results = results.sort_values(["validation_sharpe_ratio", "train_sharpe_ratio"], ascending=False)
     results.to_csv(PROCESSED_DATA_PATH / "validation_results.csv", index=False)
 
     best_result = results[results["transaction_cost"]==backtest.TRANSACTION_COST_RATE].iloc[0]

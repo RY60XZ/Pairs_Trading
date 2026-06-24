@@ -28,9 +28,10 @@ def compute_signals(lookback_window=LOOKBACK_WINDOW, entry_z=ENTRY_Z, exit_z=EXI
     top_pairs.to_csv(PROCESSED_DATA_PATH / "selected_pairs.csv", index=False)
 
     train_log_prices = pd.read_csv(PROCESSED_DATA_PATH / "train_log_prices.csv")
+    validation_log_prices = pd.read_csv(PROCESSED_DATA_PATH / "validation_log_prices.csv")
     test_log_prices = pd.read_csv(PROCESSED_DATA_PATH / "test_log_prices.csv")
     pairs_signals = []
-    for period, log_prices in [("train", train_log_prices), ("test", test_log_prices)]:
+    for period, log_prices in [("train", train_log_prices), ("validation", validation_log_prices), ("test", test_log_prices)]:
         for _, pair in top_pairs.iterrows():
             ticker1, ticker2 = pair["ticker1"], pair["ticker2"]
             y = log_prices[ticker1]
